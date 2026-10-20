@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRAduCE | Estudio de Traducción e Interpretación</title>
+  <meta name="description" content="Comprensión a tu alcance. Traducción Simple, Certificada y Pericial, Interpretación de Eventos y Transcripción de Audio y Video en Perú." />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans (Minimalist Geometric) & Six Caps / Condensed for Logo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            logo: ['Antonio', 'sans-serif'],
+          },
+          colors: {
+            traduce: {
+              lime: '#88C425',      /* Verde Lima exacto del logo y botón COTIZADOR */
+              limeHover: '#76ad1b',
+              cobalt: '#003893',    /* Azul Real del logo (esfera izquierda y 'du') */
+              navy: '#061326',      /* Azul Noche profundo del header y fondo del globo */
+              cyan: '#00C8FF',      /* Cian brillante del globo terráqueo */
+              surface: '#F8FAFC'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Minimalist custom utilities */
+    .hairline-border {
+      border-color: rgba(226, 232, 240, 0.85);
+    }
+    .globe-glow {
+      background: radial-gradient(circle at 50% 50%, rgba(0, 200, 255, 0.22) 0%, rgba(0, 56, 147, 0.08) 45%, transparent 70%);
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-globe {
+      animation: spinSlow 45s linear infinite;
+    }
+    /* Custom range slider in Lime Green */
+    input[type="range"] {
+      accent-color: #88C425;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 font-sans antialiased selection:bg-traduce-lime selection:text-traduce-navy">
+
+  <!-- 1. MINIMALIST UTILITY BAR (Con datos de contacto y medios de pago reales) -->
+  <div class="bg-white border-b border-slate-200/80 text-xs text-slate-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-11 flex items-center justify-between">
+      
+      <!-- Contact Info -->
+      <div class="flex items-center divide-x divide-slate-200">
+        <a href="mailto:informes@traduce.com.pe" class="pr-4 hover:text-traduce-cobalt transition flex items-center gap-2 font-medium">
+          <i class="fa-regular fa-envelope text-traduce-cobalt"></i>
+          <span>informes@traduce.com.pe</span>
+        </a>
+        <a href="https://wa.me/51959092457" target="_blank" class="px-4 hover:text-traduce-cobalt transition flex items-center gap-2 font-medium">
+          <i class="fa-solid fa-phone text-traduce-cobalt text-[11px]"></i>
+          <span>(+51) 959 092 457</span>
+        </a>
+      </div>
+
+      <!-- Payment Badges (Mastercard, Visa, Yape, Plin) & Language Selector -->
+      <div class="flex items-center gap-5">
+        <div class="hidden md:flex items-center gap-2 text-[11px] text-slate-400">
+          <span class="mr-1 text-slate-500 font-medium" data-i18n="top_pay">Medios de pago:</span>
+          <!-- Mastercard -->
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold">
+            <span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span>
+            <span class="w-2 h-2 rounded-full bg-amber-400 -ml-1.5 inline-block"></span>
+            Mastercard
+          </span>
+          <!-- Visa -->
+          <span class="px-2 py-0.5 rounded bg-slate-100 text-[#1A1F71] font-extrabold italic tracking-tight">VISA</span>
+          <!-- Yape -->
+          <span class="px-2 py-0.5 rounded bg-[#742284]/10 text-[#742284] font-bold">yape</span>
+          <!-- Plin -->
+          <span class="px-2 py-0.5 rounded bg-[#00B4D8]/15 text-[#0077B6] font-bold">plin</span>
+        </div>
+
+        <!-- Clean ES / EN Switcher -->
+        <div class="flex items-center border border-slate-200 rounded-md p-0.5 bg-slate-50">
+          <button onclick="setLang('es')" id="lang-es" class="px-2 py-0.5 text-[11px] font-bold rounded bg-white text-traduce-navy shadow-sm transition">
+            🇪🇸 ES
+          </button>
+          <button onclick="setLang('en')" id="lang-en" class="px-2 py-0.5 text-[11px] font-semibold rounded text-slate-500 hover:text-slate-800 transition">
+            🇺🇸 EN
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. MAIN NAVIGATION BAR (Fiel a los colores originales pero minimalista) -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Recreated Authentic TRAduCE SVG Logo -->
+      <a href="#inicio" class="flex items-center gap-3 group" aria-label="TRAduCE Inicio">
+        <!-- Esfera Azul/Verde con curva en S -->
+        <svg class="w-11 h-11 shrink-0 transition-transform duration-300 group-hover:scale-105" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="blueSphere" x1="0" y1="8" x2="36" y2="58" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0052CC"/>
+              <stop offset="100%" stop-color="#00296B"/>
+            </linearGradient>
+            <linearGradient id="limeSphere" x1="24" y1="6" x2="60" y2="56" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#A6E22E"/>
+              <stop offset="100%" stop-color="#78B816"/>
+            </linearGradient>
+          </defs>
+          <!-- Hemisferio Izquierdo Azul -->
+          <path d="M29 6C15.5 7.5 6 19 6 32.5C6 45.5 15.5 56.5 28.5 58C20 49 21 37 29 31C36 25.5 36 14 29 6Z" fill="url(#blueSphere)"/>
+          <!-- Hemisferio Derecho Verde Lima -->
+          <path d="M35 6C48.5 7.5 58 19 58 32.5C58 45.5 48.5 56.5 35.5 58C44 49 43 37 35 31C28 25.5 28 14 35 6Z" fill="url(#limeSphere)"/>
+        </svg>
+
+        <div class="flex flex-col">
+          <div class="font-logo text-3xl sm:text-4xl leading-none tracking-wide flex items-baseline">
+            <span class="text-traduce-lime font-normal">TRA</span>
+            <span class="text-traduce-cobalt font-bold lowercase text-2xl sm:text-3xl px-0.5 font-sans tracking-tighter">du</span>
+            <span class="text-traduce-lime font-normal">CE</span>
+          </div>
+          <span class="text-[9.5px] font-semibold tracking-tight text-traduce-cobalt mt-0.5" data-i18n="logo_sub">
+            Estudio de Traducción e Interpretación
+          </span>
+        </div>
+      </a>
+
+      <!-- Minimalist Nav Links -->
+      <nav class="hidden lg:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-700">
+        <a href="#inicio" class="hover:text-traduce-cobalt transition" data-i18n="nav_home">Inicio</a>
+        <a href="#proposito" class="hover:text-traduce-cobalt transition" data-i18n="nav_purpose">Propósito</a>
+        <a href="#comparador" class="hover:text-traduce-cobalt transition" data-i18n="nav_guide">Guía de Traducción</a>
+        <a href="#servicios" class="hover:text-traduce-cobalt transition" data-i18n="nav_services">Servicios</a>
+        <a href="#cotizador" class="hover:text-traduce-cobalt transition" data-i18n="nav_contact">Contactos</a>
+      </nav>
+
+      <!-- Signature Lime Green COTIZADOR Button (Fiel a la captura) -->
+      <div class="flex items-center gap-3">
+        <a href="#cotizador" class="bg-traduce-lime hover:bg-traduce-limeHover text-white font-bold text-xs uppercase tracking-wider pl-2.5 pr-5 py-2 rounded-xl shadow-sm hover:shadow transition flex items-center gap-2.5">
+          <span class="w-7 h-7 rounded-full bg-traduce-cobalt flex items-center justify-center text-traduce-lime text-xs">
+            <i class="fa-solid fa-calculator"></i>
+          </span>
+          <span data-i18n="btn_quoter">Cotizador</span>
+        </a>
+
+        <button onclick="toggleMenu()" class="lg:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100" aria-label="Abrir menú">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-nav" class="hidden lg:hidden bg-white border-t border-slate-100 px-4 py-4 space-y-3 text-sm font-semibold text-slate-700">
+      <a href="#inicio" onclick="toggleMenu()" class="block py-1.5">Inicio</a>
+      <a href="#proposito" onclick="toggleMenu()" class="block py-1.5">Propósito</a>
+      <a href="#comparador" onclick="toggleMenu()" class="block py-1.5">¿Qué traducción necesito?</a>
+      <a href="#servicios" onclick="toggleMenu()" class="block py-1.5">Servicios</a>
+      <a href="#cotizador" onclick="toggleMenu()" class="block py-1.5 text-traduce-cobalt">Cotizador Online</a>
+    </div>
+  </header>
+
+  <!-- 3. HERO MINIMALISTA CON ESFERA CIAN INTERACTIVA -->
+  <section id="inicio" class="relative bg-traduce-navy text-white overflow-hidden">
+    <!-- Glow Cian sutil inspirado en el globo original -->
+    <div class="absolute inset-0 globe-glow pointer-events-none"></div>
+    <div class="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:48px_48px]"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 relative z-10">
+      <div class="grid lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Columna Izquierda: Tipografía Minimalista y Directa -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-300">
+            <span class="w-2 h-2 rounded-full bg-traduce-lime"></span>
+            <span data-i18n="hero_pill">Estudio Peruano de Traducción e Interpretación • Desde 2009</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08]">
+            <span data-i18n="hero_h1_1">Comprensión</span>
+            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-traduce-cyan to-traduce-lime" data-i18n="hero_h1_2">
+              a tu alcance.
+            </span>
+          </h1>
+
+          <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl font-normal" data-i18n="hero_p">
+            Más de 17 años conectando empresas y personas sin barreras de idioma. Especialistas en Traducción Simple, Certificada y Pericial, Interpretación de Eventos y Transcripción Multimedia.
+          </p>
+
+          <!-- Botones de Acción Rápida -->
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <a href="#cotizador" class="px-6 py-3.5 rounded-xl bg-traduce-lime hover:bg-traduce-limeHover text-traduce-navy font-extrabold text-sm tracking-wide transition shadow-lg shadow-traduce-lime/20 flex items-center gap-2.5">
+              <span data-i18n="hero_cta1">Simular Tiempo y Cotizar</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+            <a href="#comparador" class="px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-semibold text-sm transition flex items-center gap-2">
+              <i class="fa-regular fa-compass text-traduce-cyan"></i>
+              <span data-i18n="hero_cta2">¿Qué tipo de traducción necesito?</span>
+            </a>
+          </div>
+
+          <!-- Tres Pilares en Línea Minimalista -->
+          <div class="pt-8 grid grid-cols-3 gap-4 border-t border-white/10 max-w-xl">
+            <div>
+              <span class="text-2xl font-extrabold text-white">+17 Años</span>
+              <p class="text-xs text-slate-400 mt-0.5" data-i18n="stat_1">Trayectoria desde dic. 2009</p>
+            </div>
+            <div>
+              <span class="text-2xl font-extrabold text-traduce-cyan">100% NDA</span>
+              <p class="text-xs text-slate-400 mt-0.5" data-i18n="stat_2">Reserva y confidencialidad</p>
+            </div>
+            <div>
+              <span class="text-2xl font-extrabold text-traduce-lime">Digital / Física</span>
+              <p class="text-xs text-slate-400 mt-0.5" data-i18n="stat_3">Entrega en todo el Perú</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Esfera Cian Minimalista + Resumen de las 3 Verticales -->
+        <div class="lg:col-span-5 relative flex flex-col items-center">
+          <!-- Globo Vectorial Minimalista en Cian Brillante (Homenaje moderno a la web original) -->
+          <div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center">
+            <div class="absolute inset-4 rounded-full bg-traduce-cyan/10 blur-2xl"></div>
+            
+            <svg class="w-full h-full text-traduce-cyan/80 animate-globe" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="100" cy="100" r="86" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 4"/>
+              <circle cx="100" cy="100" r="72" stroke="#00C8FF" stroke-width="1.5" fill="rgba(0, 200, 255, 0.05)"/>
+              <ellipse cx="100" cy="100" rx="38" ry="72" stroke="currentColor" stroke-width="1"/>
+              <ellipse cx="100" cy="100" rx="72" ry="32" stroke="currentColor" stroke-width="1"/>
+              <line x1="28" y1="100" x2="172" y2="100" stroke="#88C425" stroke-width="1" stroke-opacity="0.6"/>
+              <line x1="100" y1="28" x2="100" y2="172" stroke="#88C425" stroke-width="1" stroke-opacity="0.6"/>
+              <circle cx="132" cy="74" r="4" fill="#88C425"/>
+              <circle cx="68" cy="118" r="4" fill="#00C8FF"/>
+              <circle cx="115" cy="130" r="3.5" fill="#88C425"/>
+            </svg>
+
+            <!-- Tarjetas flotantes minimalistas sobre el globo -->
+            <div class="absolute top-4 left-0 bg-slate-900/90 backdrop-blur-md border border-white/15 rounded-xl px-4 py-2.5 shadow-lg">
+              <p class="text-[11px] text-traduce-cyan font-bold uppercase tracking-wider">01 • Documentos</p>
+              <p class="text-xs font-semibold text-white">Simple • Certificada • Pericial</p>
+            </div>
+
+            <div class="absolute bottom-16 -right-2 bg-slate-900/90 backdrop-blur-md border border-white/15 rounded-xl px-4 py-2.5 shadow-lg">
+              <p class="text-[11px] text-traduce-lime font-bold uppercase tracking-wider">02 • Eventos</p>
+              <p class="text-xs font-semibold text-white">Interpretación Virtual y Presencial</p>
+            </div>
+
+            <div class="absolute -bottom-2 left-4 bg-slate-900/90 backdrop-blur-md border border-white/15 rounded-xl px-4 py-2.5 shadow-lg">
+              <p class="text-[11px] text-sky-300 font-bold uppercase tracking-wider">03 • Multimedia</p>
+              <p class="text-xs font-semibold text-white">Transcripción de Audio y Video</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. DIFERENCIADOR ÚNICO: ASESOR INTERACTIVO "¿QUÉ TIPO DE TRADUCCIÓN NECESITO?" -->
+  <section id="comparador" class="py-20 bg-white border-b border-slate-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-2xl mb-10">
+        <span class="text-xs font-bold uppercase tracking-widest text-traduce-cobalt">Elección Inteligente</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-traduce-navy mt-1">
+          ¿Qué modalidad de traducción requiere tu trámite?
+        </h2>
+        <p class="text-slate-500 text-sm mt-2">
+          Selecciona tu necesidad para conocer el alcance exacto antes de solicitar tu cotización.
+        </p>
+      </div>
+
+      <!-- Selector Minimalista de 3 Pestañas -->
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        
+        <div class="lg:col-span-5 space-y-3">
+          <button onclick="showDocType('simple')" id="btn-type-simple" class="w-full text-left p-5 rounded-2xl border-2 border-traduce-cobalt bg-slate-50/70 transition flex items-center justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-traduce-cobalt">Modalidad 01</span>
+              <h3 class="font-bold text-base text-traduce-navy mt-0.5">Traducción Simple (No Oficial)</h3>
+            </div>
+            <i class="fa-solid fa-chevron-right text-traduce-cobalt text-sm"></i>
+          </button>
+
+          <button onclick="showDocType('certificada')" id="btn-type-certificada" class="w-full text-left p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white transition flex items-center justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-traduce-lime">Modalidad 02 • Más Solicitada</span>
+              <h3 class="font-bold text-base text-traduce-navy mt-0.5">Traducción Certificada</h3>
+            </div>
+            <i class="fa-solid fa-chevron-right text-slate-400 text-sm"></i>
+          </button>
+
+          <button onclick="showDocType('pericial')" id="btn-type-pericial" class="w-full text-left p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white transition flex items-center justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Modalidad 03 • Legal / Judicial</span>
+              <h3 class="font-bold text-base text-traduce-navy mt-0.5">Traducción Pericial</h3>
+            </div>
+            <i class="fa-solid fa-chevron-right text-slate-400 text-sm"></i>
+          </button>
+        </div>
+
+        <!-- Panel Dinámico de Detalle -->
+        <div class="lg:col-span-7 bg-traduce-surface rounded-3xl p-8 border border-slate-200/80" id="doc-detail-panel">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-5 border-b border-slate-200">
+            <div>
+              <span id="detail-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-traduce-cobalt/10 text-traduce-cobalt">Uso Informativo y Corporativo</span>
+              <h3 id="detail-title" class="text-2xl font-extrabold text-traduce-navy mt-2">Traducción Simple (No Oficial)</h3>
+            </div>
+            <span id="detail-delivery" class="text-xs font-semibold text-slate-500 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+              <i class="fa-regular fa-clock text-traduce-lime mr-1"></i> Entrega 100% Digital
+            </span>
+          </div>
+
+          <p id="detail-desc" class="text-slate-600 text-sm leading-relaxed mt-5">
+            Ideal para documentos de trabajo interno, manuales técnicos, páginas web, presentaciones de directorio, artículos académicos o correspondencia comercial que no requieren sellos oficiales ante entidades públicas.
+          </p>
+
+          <div class="mt-6">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Casos de uso frecuentes:</p>
+            <div id="detail-tags" class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-700">Informes corporativos</span>
+              <span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-700">Brochures y catálogos</span>
+              <span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-700">Investigación y papers</span>
+              <span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-700">Contratos borradores</span>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-5 border-t border-slate-200 flex items-center justify-between">
+            <span class="text-xs text-slate-500">Garantía de revisión terminológica incluida</span>
+            <a href="#cotizador" onclick="preselectQuoterFromComparator()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-traduce-cobalt hover:bg-traduce-navy text-white text-xs font-bold uppercase tracking-wider transition">
+              <span>Cotizar esta modalidad</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. CATÁLOGO DE SERVICIOS MINIMALISTA (Numeración corregida 01 al 06) -->
+  <section id="servicios" class="py-20 bg-traduce-surface">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-traduce-cobalt">Ecosistema de Soluciones</span>
+          <h2 class="text-3xl font-extrabold text-traduce-navy mt-1">Nuestros Servicios</h2>
+        </div>
+        <p class="text-sm text-slate-500 max-w-md">
+          Soluciones lingüísticas integrales operadas por una red de profesionales nacionales y extranjeros especializados por sector.
+        </p>
+      </div>
+
+      <!-- Minimalist Architectural Grid (1px borders) -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 bg-slate-200 gap-[1px] rounded-3xl overflow-hidden border border-slate-200 shadow-sm">
+        
+        <!-- 01 -->
+        <div class="bg-white p-8 hover:bg-slate-50/80 transition flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-extrabold tracking-widest text-traduce-cobalt bg-traduce-cobalt/10 px-2.5 py-1 rounded">01</span>
+              <i class="fa-solid fa-file-Lines text-slate-300 group-hover:text-traduce-lime transition text-xl"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-traduce-navy">Traducción de Documentos</h3>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+              Traducción Simple (no oficial), Traducción Certificada y Traducción Pericial con rigor legal, técnico y financiero.
+            </p>
+          </div>
+          <a href="#cotizador" onclick="setService('Traducción Certificada')" class="mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-traduce-cobalt group-hover:text-traduce-lime transition">
+            <span>Cotizar documento</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- 02 -->
+        <div class="bg-white p-8 hover:bg-slate-50/80 transition flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-extrabold tracking-widest text-traduce-cobalt bg-traduce-cobalt/10 px-2.5 py-1 rounded">02</span>
+              <i class="fa-solid fa-headset text-slate-300 group-hover:text-traduce-lime transition text-xl"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-traduce-navy">Interpretación de Eventos</h3>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+              Garantizamos la solución perfecta para sus eventos virtuales (Zoom, Teams) y conferencias presenciales con intérpretes simultáneos y consecutivos.
+            </p>
+          </div>
+          <a href="#cotizador" onclick="setService('Interpretación de Eventos')" class="mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-traduce-cobalt group-hover:text-traduce-lime transition">
+            <span>Reservar intérpretes</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- 03 -->
+        <div class="bg-white p-8 hover:bg-slate-50/80 transition flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-extrabold tracking-widest text-traduce-cobalt bg-traduce-cobalt/10 px-2.5 py-1 rounded">03</span>
+              <i class="fa-solid fa-microphone-lines text-slate-300 group-hover:text-traduce-lime transition text-xl"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-traduce-navy">Transcripción de Audio y Video</h3>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+              Transcribimos a texto sus archivos de audio y video en el idioma en que se encuentren, ideal para audiencias, entrevistas y peritajes.
+            </p>
+          </div>
+          <a href="#cotizador" onclick="setService('Transcripción de Audio y Video')" class="mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-traduce-cobalt group-hover:text-traduce-lime transition">
+            <span>Cotizar audio / video</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- 04 -->
+        <div class="bg-white p-8 hover:bg-slate-50/80 transition flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-extrabold tracking-widest text-slate-500 bg-slate-100 px-2.5 py-1 rounded">04</span>
+              <i class="fa-solid fa-pen-nib text-slate-300 group-hover:text-traduce-lime transition text-xl"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-traduce-navy">Edición y Corrección de Textos</h3>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+              Perfeccionamiento de estilo, gramática y coherencia argumental para publicaciones corporativas, memorias anuales e investigaciones.
+            </p>
+          </div>
+          <a href="#cotizador" onclick="setService('Edición y Corrección de Textos')" class="mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-traduce-cobalt group-hover:text-traduce-lime transition">
+            <span>Solicitar revisión</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- 05 -->
+        <div class="bg-white p-8 hover:bg-slate-50/80 transition flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-extrabold tracking-widest text-slate-500 bg-slate-100 px-2.5 py-1 rounded">05</span>
+              <i class="fa-solid fa-graduation-cap text-slate-300 group-hover:text-traduce-lime transition text-xl"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-traduce-navy">Enseñanza de Inglés y Español</h3>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+              Capacitación lingüística enfocada en profesionales y empresas, respaldada por más de 17 años de experiencia en docencia e investigación.
+            </p>
+          </div>
+          <a href="#cotizador" onclick="setService('Enseñanza de Idiomas')" class="mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-traduce-cobalt group-hover:text-traduce-lime transition">
+            <span>Consultar programas</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- 06 -->
+        <div class="bg-white p-8 hover:bg-slate-50/80 transition flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-extrabold tracking-widest text-slate-500 bg-slate-100 px-2.5 py-1 rounded">06</span>
+              <i class="fa-solid fa-calendar-check text-slate-300 group-hover:text-traduce-lime transition text-xl"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-traduce-navy">Organización de Eventos</h3>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+              Coordinación integral de eventos multilingües, congresos y encuentros corporativos con soporte técnico y protocolo.
+            </p>
+          </div>
+          <a href="#cotizador" onclick="setService('Organización de Eventos')" class="mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-traduce-cobalt group-hover:text-traduce-lime transition">
+            <span>Planificar evento</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. PROPÓSITO, POR QUÉ ELEGIRNOS Y CLIENTES (Diseño Editorial Minimalista) -->
+  <section id="proposito" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-12 items-start">
+        
+        <!-- Reseña Institucional -->
+        <div class="lg:col-span-5 space-y-5">
+          <span class="text-xs font-bold uppercase tracking-widest text-traduce-lime bg-traduce-navy px-3 py-1 rounded-full">Nuestro Propósito</span>
+          <h2 class="text-3xl font-extrabold text-traduce-navy leading-tight">
+            Más de 17 años eliminando las barreras del idioma en Perú.
+          </h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            <strong>TRADUCE – Estudio de Traducción e Interpretación</strong> cuenta con trayectoria comercial en Perú desde diciembre de 2009. Junto a una red de experimentados profesionales nacionales y extranjeros, creamos un entorno dinámico multicultural que combina rapidez, confidencialidad y especialización a un precio justo.
+          </p>
+
+          <!-- Clientes Destacados -->
+          <div class="pt-6 border-t border-slate-200">
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Respaldo Corporativo y Clientes:</p>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-extrabold text-traduce-navy">MIRANDA & AMADO</span>
+              <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-extrabold text-traduce-navy">SMARTGROUP PERÚ</span>
+              <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-600">Estudios Jurídicos & Notarías</span>
+              <span class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-600">Empresas Corporativas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Los 8 Diferenciadores de TRADUCE en formato Minimalista -->
+        <div class="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl border border-slate-200/90 hover:border-traduce-cobalt transition">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-traduce-cobalt/10 text-traduce-cobalt font-bold text-xs flex items-center justify-center">01</span>
+              <h3 class="font-bold text-sm text-traduce-navy">Profesionalismo y Calidad</h3>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">Rigurosidad terminológica y control de calidad en cada entrega documental o evento.</p>
+          </div>
+
+          <div class="p-5 rounded-2xl border border-slate-200/90 hover:border-traduce-cobalt transition">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-traduce-lime/20 text-traduce-navy font-bold text-xs flex items-center justify-center">02</span>
+              <h3 class="font-bold text-sm text-traduce-navy">Rapidez y Mejores Tarifas</h3>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">Tiempos de respuesta optimizados con presupuestos competitivos y transparentes.</p>
+          </div>
+
+          <div class="p-5 rounded-2xl border border-slate-200/90 hover:border-traduce-cobalt transition">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-traduce-cobalt/10 text-traduce-cobalt font-bold text-xs flex items-center justify-center">03</span>
+              <h3 class="font-bold text-sm text-traduce-navy">Confidencialidad Absoluta</h3>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">Protección estricta de la información sensible, legal, corporativa y personal.</p>
+          </div>
+
+          <div class="p-5 rounded-2xl border border-slate-200/90 hover:border-traduce-cobalt transition">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-lg bg-traduce-lime/20 text-traduce-navy font-bold text-xs flex items-center justify-center">04</span>
+              <h3 class="font-bold text-sm text-traduce-navy">Especialización y Post-Venta</h3>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">Acompañamiento continuo posterior a la entrega para garantizar tu total satisfacción.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. SIMULADOR DE TIEMPOS Y COTIZADOR INTERACTIVO -->
+  <section id="cotizador" class="py-20 bg-traduce-navy text-white relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="grid lg:grid-cols-12 gap-10 items-start">
+        
+        <!-- Columna Izquierda: Estimador de Entrega en Tiempo Real -->
+        <div class="lg:col-span-5 space-y-6 bg-white/5 border border-white/10 rounded-3xl p-8">
+          <span class="text-xs font-bold uppercase tracking-widest text-traduce-lime">Herramienta Interactiva</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold leading-tight">
+            Simulador de Plazo y Cotizador Online
+          </h2>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Desliza para estimar el tiempo referencial de entrega según el volumen de tu proyecto antes de enviar tu solicitud.
+          </p>
+
+          <!-- Slider Interactivo -->
+          <div class="space-y-3 pt-2">
+            <div class="flex justify-between text-xs font-semibold">
+              <span class="text-slate-300" id="slider-label">Volumen estimado (Páginas / Horas):</span>
+              <span class="text-traduce-lime font-extrabold text-base" id="slider-value">5 páginas</span>
+            </div>
+            <input type="range" id="volume-slider" min="1" max="50" value="5" oninput="updateEstimator()" class="w-full cursor-pointer" />
+            <div class="flex justify-between text-[11px] text-slate-400">
+              <span>1 pág / Urgente</span>
+              <span>25 págs</span>
+              <span>+50 págs / Proyecto</span>
+            </div>
+          </div>
+
+          <!-- Resultado Dinámico del Estimador -->
+          <div class="bg-traduce-cobalt/30 border border-traduce-cyan/30 rounded-2xl p-4 flex items-center justify-between">
+            <div>
+              <p class="text-[11px] uppercase tracking-wider text-traduce-cyan font-bold">Plazo Referencial Estimado</p>
+              <p class="text-lg font-extrabold text-white mt-0.5" id="estimated-time">24 a 48 horas hábiles</p>
+            </div>
+            <i class="fa-solid fa-bolt text-traduce-lime text-2xl"></i>
+          </div>
+
+          <!-- Medios de Pago Integrados -->
+          <div class="pt-4 border-t border-white/10 space-y-2">
+            <p class="text-xs font-semibold text-slate-300">Facilidades de pago habilitadas:</p>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <span class="px-3 py-1.5 rounded-lg bg-white/10 text-white font-medium">Mastercard / Visa</span>
+              <span class="px-3 py-1.5 rounded-lg bg-white/10 text-traduce-lime font-bold">Yape / Plin</span>
+              <span class="px-3 py-1.5 rounded-lg bg-white/10 text-slate-200">Transferencia / Factura RUC</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Formulario Limpio Conectado a WhatsApp y Correo -->
+        <div class="lg:col-span-7 bg-white text-slate-900 rounded-3xl p-8 sm:p-10 shadow-2xl">
+          <form onsubmit="submitMinimalQuote(event)" class="space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h3 class="text-lg font-extrabold text-traduce-navy">Datos de tu Cotización</h3>
+              <span class="text-xs font-semibold text-emerald-600 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Atención en línea
+              </span>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Servicio *</label>
+                <select id="f-service" onchange="updateEstimator()" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-medium focus:border-traduce-cobalt focus:bg-white focus:outline-none">
+                  <option value="Traducción Certificada">Traducción Certificada</option>
+                  <option value="Traducción Simple (No Oficial)">Traducción Simple (No Oficial)</option>
+                  <option value="Traducción Pericial">Traducción Pericial</option>
+                  <option value="Interpretación de Eventos">Interpretación de Eventos</option>
+                  <option value="Transcripción de Audio y Video">Transcripción de Audio y Video</option>
+                  <option value="Edición y Corrección de Textos">Edición y Corrección de Textos</option>
+                  <option value="Enseñanza de Idiomas">Enseñanza de Inglés / Español</option>
+                  <option value="Organización de Eventos">Organización de Eventos</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Combinación de Idiomas *</label>
+                <input type="text" id="f-langs" required placeholder="Ej. Inglés a Español" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:border-traduce-cobalt focus:bg-white focus:outline-none" />
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Nombre o Empresa *</label>
+                <input type="text" id="f-name" required placeholder="Nombre completo o Razón Social" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:border-traduce-cobalt focus:bg-white focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Medio de Pago Preferido</label>
+                <select id="f-payment" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-medium focus:border-traduce-cobalt focus:bg-white focus:outline-none">
+                  <option value="Transferencia / Factura Corporativa">Transferencia / Factura Corporativa</option>
+                  <option value="Tarjeta Visa / Mastercard">Tarjeta Visa / Mastercard</option>
+                  <option value="Yape / Plin">Yape / Plin</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Comentarios o Requerimientos Especiales</label>
+              <textarea id="f-notes" rows="2" placeholder="Indica si requieres entrega física, fecha de evento o detalles del archivo..." class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:border-traduce-cobalt focus:bg-white focus:outline-none"></textarea>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+              <button type="submit" class="flex-1 py-3.5 px-6 rounded-xl bg-traduce-lime hover:bg-traduce-limeHover text-traduce-navy font-extrabold text-xs uppercase tracking-wider transition shadow-md flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>Cotizar al instante por WhatsApp</span>
+              </button>
+              <button type="button" onclick="sendMinimalEmail()" class="py-3.5 px-5 rounded-xl border border-slate-200 hover:border-traduce-cobalt text-slate-700 hover:text-traduce-cobalt font-bold text-xs uppercase tracking-wider transition flex items-center justify-center gap-2">
+                <i class="fa-regular fa-envelope"></i>
+                <span>Correo</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FOOTER MINIMALISTA (Sin textos Lorem Ipsum de plantilla y actualizado a 2026) -->
+  <footer class="bg-white border-t border-slate-200 py-12 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      
+      <div class="flex items-center gap-3">
+        <span class="font-logo text-2xl tracking-wide">
+          <span class="text-traduce-lime">TRA</span><span class="text-traduce-cobalt font-sans font-bold text-xl">du</span><span class="text-traduce-lime">CE</span>
+        </span>
+        <span class="text-slate-300">|</span>
+        <span>Copyright © 2026 TRADUCE – Estudio de Traducción e Interpretación.</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-6 font-medium text-slate-600">
+        <a href="mailto:informes@traduce.com.pe" class="hover:text-traduce-cobalt transition">informes@traduce.com.pe</a>
+        <a href="https://wa.me/51959092457" target="_blank" class="hover:text-traduce-cobalt transition">(+51) 959 092 457</a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- BOTÓN FLOTANTE VERDE LIMA (Fiel al círculo verde inferior derecho de la captura) -->
+  <a href="https://wa.me/51959092457?text=Hola%20TRADUCE,%20deseo%20cotizar%20un%20servicio." target="_blank" aria-label="Contacto directo WhatsApp" class="fixed bottom-6 right-6 z-50 w-13 h-13 p-3.5 rounded-full bg-traduce-lime hover:bg-traduce-limeHover text-traduce-navy shadow-lg hover:scale-105 transition flex items-center justify-center">
+    <i class="fa-brands fa-whatsapp text-2xl"></i>
+  </a>
+
+  <!-- SCRIPTS INTERACTIVOS -->
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobile-nav').classList.toggle('hidden');
+    }
+
+    // 1. Comparador Interactivo de Tipos de Traducción
+    let currentSelectedDocType = 'Traducción Simple (No Oficial)';
+    const docTypesData = {
+      simple: {
+        badge: 'Uso Informativo y Corporativo',
+        title: 'Traducción Simple (No Oficial)',
+        delivery: 'Entrega 100% Digital Rápida',
+        desc: 'Ideal para documentos de trabajo interno, manuales técnicos, páginas web, presentaciones de directorio, artículos académicos o correspondencia comercial que no requieren sellos oficiales ante entidades públicas.',
+        tags: ['Informes corporativos', 'Brochures y catálogos', 'Investigación y papers', 'Documentos internos'],
+        quoterValue: 'Traducción Simple (No Oficial)'
+      },
+      certificada: {
+        badge: 'Con Sello y Firma de Traductor Colegiado',
+        title: 'Traducción Certificada',
+        delivery: 'Entrega Digital Firmada o Física',
+        desc: 'Traducción con validez oficial respaldada por el sello y firma de un Traductor Público Juramentado o Colegiado. Indispensable para trámites consulares, visas, becas internacionales, registros públicos y licitaciones.',
+        tags: ['Certificados de estudios y notas', 'Partidas y antecedentes', 'Contratos y poderes', 'Trámites de visa y embajadas'],
+        quoterValue: 'Traducción Certificada'
+      },
+      pericial: {
+        badge: 'Ámbito Judicial, Arbitral y Fiscal',
+        title: 'Traducción Pericial',
+        delivery: 'Validez Procesal y Peritaje',
+        desc: 'Elaborada por peritos traductores acreditados para procesos judiciales, arbitrajes, carpetas fiscales, peritajes de parte y transcripciones de audiencias que exigen máximo rigor probatorio.',
+        tags: ['Expedientes judiciales', 'Laudos y arbitrajes', 'Pruebas documentales', 'Peritajes lingüísticos'],
+        quoterValue: 'Traducción Pericial'
+      }
+    };
+
+    function showDocType(type) {
+      const data = docTypesData[type];
+      currentSelectedDocType = data.quoterValue;
+
+      // Update buttons styling
+      ['simple', 'certificada', 'pericial'].forEach(t => {
+        const btn = document.getElementById('btn-type-' + t);
+        if (t === type) {
+          btn.className = 'w-full text-left p-5 rounded-2xl border-2 border-traduce-cobalt bg-slate-50/70 transition flex items-center justify-between';
+        } else {
+          btn.className = 'w-full text-left p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white transition flex items-center justify-between';
+        }
+      });
+
+      // Update panel content
+      document.getElementById('detail-badge').textContent = data.badge;
+      document.getElementById('detail-title').textContent = data.title;
+      document.getElementById('detail-delivery').innerHTML = `<i class="fa-regular fa-clock text-traduce-lime mr-1"></i> ${data.delivery}`;
+      document.getElementById('detail-desc').textContent = data.desc;
+
+      const tagsContainer = document.getElementById('detail-tags');
+      tagsContainer.innerHTML = data.tags.map(tag =>
+        `<span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-700">${tag}</span>`
+      ).join('');
+    }
+
+    function preselectQuoterFromComparator() {
+      setService(currentSelectedDocType);
+    }
+
+    function setService(serviceName) {
+      const sel = document.getElementById('f-service');
+      for (let i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === serviceName) {
+          sel.selectedIndex = i;
+          break;
+        }
+      }
+      updateEstimator();
+    }
+
+    // 2. Simulador de Tiempos en Vivo
+    function updateEstimator() {
+      const vol = parseInt(document.getElementById('volume-slider').value, 10);
+      const service = document.getElementById('f-service').value;
+      const valEl = document.getElementById('slider-value');
+      const timeEl = document.getElementById('estimated-time');
+
+      if (service.includes('Interpretación') || service.includes('Eventos')) {
+        valEl.textContent = `${vol} hora(s) de evento`;
+        timeEl.textContent = 'Reserva inmediata según agenda';
+      } else if (service.includes('Transcripción')) {
+        valEl.textContent = `${vol * 10} min de audio/video`;
+        timeEl.textContent = vol <= 5 ? '24 a 48 horas hábiles' : '3 a 5 días hábiles';
+      } else {
+        valEl.textContent = `${vol} página(s)`;
+        if (vol <= 5) {
+          timeEl.textContent = '24 horas hábiles (Express disponible)';
+        } else if (vol <= 15) {
+          timeEl.textContent = '2 a 3 días hábiles';
+        } else {
+          timeEl.textContent = '4 a 6 días hábiles (Asignación de equipo)';
+        }
+      }
+    }
+
+    // 3. Envío a WhatsApp y Correo con Resumen del Simulador
+    function submitMinimalQuote(e) {
+      e.preventDefault();
+      const service = document.getElementById('f-service').value;
+      const langs = document.getElementById('f-langs').value;
+      const name = document.getElementById('f-name').value;
+      const payment = document.getElementById('f-payment').value;
+      const volume = document.getElementById('slider-value').textContent;
+      const estTime = document.getElementById('estimated-time').textContent;
+      const notes = document.getElementById('f-notes').value || 'Ninguno';
+
+      const msg = `Hola *TRADUCE*, deseo cotizar el siguiente requerimiento:%0A%0A` +
+        `• *Servicio:* ${service}%0A` +
+        `• *Idiomas:* ${langs}%0A` +
+        `• *Volumen estimado:* ${volume} (${estTime})%0A` +
+        `• *Cliente / Empresa:* ${name}%0A` +
+        `• *Medio de pago:* ${payment}%0A` +
+        `• *Notas:* ${notes}`;
+
+      window.open(`https://wa.me/51959092457?text=${msg}`, '_blank');
+    }
+
+    function sendMinimalEmail() {
+      const service = document.getElementById('f-service').value;
+      const langs = document.getElementById('f-langs').value || 'Por definir';
+      const name = document.getElementById('f-name').value || 'Cliente Web';
+      const payment = document.getElementById('f-payment').value;
+      const volume = document.getElementById('slider-value').textContent;
+      const notes = document.getElementById('f-notes').value || '-';
+
+      const subject = encodeURIComponent(`Cotización Web TRADUCE - ${service} (${name})`);
+      const body = encodeURIComponent(
+        `Estimado equipo de TRADUCE,\n\nSolicito cotización para:\n` +
+        `- Servicio: ${service}\n` +
+        `- Idiomas: ${langs}\n` +
+        `- Volumen aprox.: ${volume}\n` +
+        `- Cliente: ${name}\n` +
+        `- Medio de pago preferido: ${payment}\n` +
+        `- Detalles: ${notes}\n`
+      );
+      window.location.href = `mailto:informes@traduce.com.pe?subject=${subject}&body=${body}`;
+    }
+
+    // 4. Selector Bilingüe ES / EN
+    const i18n = {
+      es: {
+        top_pay: 'Medios de pago:',
+        logo_sub: 'Estudio de Traducción e Interpretación',
+        nav_home: 'Inicio',
+        nav_purpose: 'Propósito',
+        nav_guide: 'Guía de Traducción',
+        nav_services: 'Servicios',
+        nav_contact: 'Contactos',
+        btn_quoter: 'Cotizador',
+        hero_pill: 'Estudio Peruano de Traducción e Interpretación • Desde 2009',
+        hero_h1_1: 'Comprensión',
+        hero_h1_2: 'a tu alcance.',
+        hero_p: 'Más de 17 años conectando empresas y personas sin barreras de idioma. Especialistas en Traducción Simple, Certificada y Pericial, Interpretación de Eventos y Transcripción Multimedia.',
+        hero_cta1: 'Simular Tiempo y Cotizar',
+        hero_cta2: '¿Qué tipo de traducción necesito?'
+      },
+      en: {
+        top_pay: 'Payment methods:',
+        logo_sub: 'Translation & Interpreting Studio',
+        nav_home: 'Home',
+        nav_purpose: 'Purpose',
+        nav_guide: 'Translation Guide',
+        nav_services: 'Services',
+        nav_contact: 'Contact',
+        btn_quoter: 'Quoter',
+        hero_pill: 'Peruvian Translation & Interpreting Studio • Since 2009',
+        hero_h1_1: 'Understanding',
+        hero_h1_2: 'within your reach.',
+        hero_p: 'Over 17 years connecting companies and people across language barriers. Specialists in Simple, Certified & Legal Translation, Event Interpreting, and Multimedia Transcription.',
+        hero_cta1: 'Estimate Time & Quote',
+        hero_cta2: 'Which translation do I need?'
+      }
+    };
+
+    function setLang(l) {
+      document.getElementById('lang-es').className = l === 'es'
+        ? 'px-2 py-0.5 text-[11px] font-bold rounded bg-white text-traduce-navy shadow-sm transition'
+        : 'px-2 py-0.5 text-[11px] font-semibold rounded text-slate-500 hover:text-slate-800 transition';
+      document.getElementById('lang-en').className = l === 'en'
+        ? 'px-2 py-0.5 text-[11px] font-bold rounded bg-white text-traduce-navy shadow-sm transition'
+        : 'px-2 py-0.5 text-[11px] font-semibold rounded text-slate-500 hover:text-slate-800 transition';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (i18n[l][k]) el.textContent = i18n[l][k];
+      });
+    }
+  </script>
+</body>
+</html>
